@@ -1,0 +1,99 @@
+# load mesa
+loadrt mesa_vfd ports=hm2_7i96s.0.pktuart.0
+addf mesa_vfd.00 servo-thread
+
+# set connection details
+setp mesa_vfd.00.address 1
+setp mesa_vfd.00.baudrate 19200
+setp mesa_vfd.00.drive-delay 10
+setp mesa_vfd.00.parity 0
+setp mesa_vfd.00.rxdelay 15
+setp mesa_vfd.00.txdelay 20
+setp mesa_vfd.00.update-hz 0
+
+# set float scales
+setp mesa_vfd.00.output_freq_fb-scale 6		# Feedback output
+
+setp mesa_vfd.00.output_info-00-scale 0.01 	# Current
+setp mesa_vfd.00.output_info-01-scale 0.1	# Voltage
+setp mesa_vfd.00.output_info-02-scale 0.01 	# Torque
+setp mesa_vfd.00.output_info-03-scale 0.1	# DC voltage
+setp mesa_vfd.00.output_info-04-scale 1		# VFD Temperature
+
+setp mesa_vfd.00.power-energy-00-scale 0.01	# Power
+setp mesa_vfd.00.power-energy-01-scale 0.01	# Total energy consumed
+
+setp mesa_vfd.00.output-frequency-scale 2.4
+
+# set output nets
+net spindle-vel-fb-rpm	<= mesa_vfd.00.output_freq_fb
+net spindle-current	<= mesa_vfd.00.output_info-00
+net spindle-voltage	<= mesa_vfd.00.output_info-01
+net spindle-torque	<= mesa_vfd.00.output_info-02
+net spindle-dc-voltage	<= mesa_vfd.00.output_info-03
+net vfd-temperature	<= mesa_vfd.00.output_info-04
+
+net spindle-power	<= mesa_vfd.00.power-energy-00
+net spindle-energy	<= mesa_vfd.00.power-energy-01
+
+net vfd-state		<= mesa_vfd.00.state-fault-00
+net vfd-fault		<= mesa_vfd.00.state-fault-01
+
+net spindle-vel-cmd-rpm-abs	=>	mesa_vfd.00.output-frequency
+#net spindle-at-speed	<= vfdmod.spindle.at-speed
+
+
+loadrt mux_generic config="uu8"
+addf mux-gen.00 servo-thread
+
+
+setp mux-gen.00.in-u32-00 0 # stop
+setp mux-gen.00.in-u32-01 3 # reverse
+setp mux-gen.00.in-u32-02 0 # stop
+setp mux-gen.00.in-u32-03 1 # run
+setp mux-gen.00.in-u32-04 128 # reset
+setp mux-gen.00.in-u32-05 131 # reset but keep running (if pressed when running)
+setp mux-gen.00.in-u32-06 128 # reset
+setp mux-gen.00.in-u32-07 129 # reset but keep running (if pressed when running)
+
+net spindle-enable	=> mux-gen.00.sel-bit-00
+net spindle-cw		=> mux-gen.00.sel-bit-01
+net fault-reset		=> mux-gen.00.sel-bit-02
+
+net spindle-runmode	mux-gen.00.out-u32	=>	mesa_vfd.00.output-action
+
+
+# split status and fault code into bits
+loadrt bitslice count=2 personality=16,16
+addf bitslice.0 servo-thread
+addf bitslice.1 servo-thread
+
+net vfd-state	=>	bitslice.0.in	# yes these are unused atm
+net vfd-fault	=>	bitslice.1.in	# yes these are unused atm
+
+
+# estops
+loadrt conv_u32_bit count=1
+loadrt or2 count=1
+
+addf conv-u32-bit.0 servo-thread
+addf or2.0 servo-thread
+
+net vfd-fault	=>	conv-u32-bit.0.in
+
+net vfd-fault-bit	conv-u32-bit.0.out	=>	or2.0.in0
+net vfd-mesa-fault	mesa_vfd.00.fault	=>	or2.0.in1
+
+net spindle-fault 	or2.0.out		=>	spindle.0.amp-fault-in
+
+
+# Spindle at spead
+loadrt near count=1
+addf near.0 servo-thread
+
+setp near.0.difference 250
+
+net spindle-vel-cmd-rpm-abs => near.0.in1
+net spindle-vel-fb-rpm => near.0.in2
+
+net spindle-at-speed <= near.0.out

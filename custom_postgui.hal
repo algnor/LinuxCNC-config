@@ -1,0 +1,39 @@
+# Include your custom_postgui HAL commands here
+# This file will not be overwritten when you run PNCconf again
+
+net spindle-vel-cmd-rpm	=> pyvcp.spindle-rpm
+net spindle-at-speed	=> pyvcp.spindle-at-speed-led
+net spindle-vel-fb-rpm	=> pyvcp.spindle-speed
+net spindle-current	=> pyvcp.spindle-current
+net spindle-power	=> pyvcp.spindle-power
+net spindle-dc-voltage	=> pyvcp.vfd-dc-bus
+net spindle-voltage	=> pyvcp.spindle-voltage
+net vfd-temperature	=> pyvcp.vfd-temperature
+net spindle-torque	=> pyvcp.spindle-torque
+net laser hm2_7i96s.0.ssr.00.out-02	<= pyvcp.laser-chkbtn
+
+net gui.s0 bitslice.0.out-00	=> pyvcp.s0
+net gui.s1 bitslice.0.out-01	=> pyvcp.s1
+net gui.s2 bitslice.0.out-02	=> pyvcp.s2
+net gui.s3 bitslice.0.out-03	=> pyvcp.s3
+net gui.s4 bitslice.0.out-04	=> pyvcp.s4
+net gui.s5 bitslice.0.out-05	=> pyvcp.s5
+net gui.s6 bitslice.0.out-06	=> pyvcp.s6
+net gui.s10 bitslice.0.out-10	=> pyvcp.s10
+net gui.s11 bitslice.0.out-11	=> pyvcp.s11
+net gui.s12 bitslice.0.out-12	=> pyvcp.s12
+
+net gui.f0 bitslice.1.out-01	=> pyvcp.f1
+net gui.f1 bitslice.1.out-04	=> pyvcp.f4
+net gui.f2 bitslice.1.out-05	=> pyvcp.f5
+net gui.f3 bitslice.1.out-06	=> pyvcp.f6
+net gui.f4 bitslice.1.out-07	=> pyvcp.f7
+net gui.f5 bitslice.1.out-08	=> pyvcp.f8
+net gui.f6 bitslice.1.out-09	=> pyvcp.f9
+net gui.f10 bitslice.1.out-10	=> pyvcp.f10
+net gui.f11 bitslice.1.out-13	=> pyvcp.f13
+net gui.f12 bitslice.1.out-14	=> pyvcp.f14
+
+net fault-reset <= pyvcp.fault-reset
+net gui.comm-fault mesa_vfd.00.last-error => pyvcp.comm-fault-last
+net vfd-mesa-fault => pyvcp.comm-fault

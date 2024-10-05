@@ -1,0 +1,32 @@
+# Include your custom HAL commands here
+# This file will not be overwritten when you run PNCconf again
+
+source vfd.hal
+
+#loadusr -W vfdmod h1_vfd.ini
+#loadusr -W mb2hal config="mb2hal.ini"
+
+
+#loadusr -W hal_manualtoolchange
+
+#net spindle-vel-cmd-rpm	=> vfdmod.spindle.rpm-in
+#net spindle-at-speed	<= vfdmod.spindle.at-speed
+#net spindle-vel-fb-rpm	<= vfdmod.spindle.rpm-out
+#net spindle-current	<= vfdmod.parameters.outputcurrent
+#net spindle-power	<= vfdmod.parameters.outputpower
+#net spindle-dc-voltage	<= vfdmod.parameters.dclinkvoltage
+#net spindle-voltage	<= vfdmod.parameters.outputvoltage
+#net vfd-temperature	<= vfdmod.parameters.temperature
+#net spindle-torque	<= vfdmod.parameters.outputtorque
+#net spindle-cw		=> vfdmod.control.run-forward
+#net spindle-ccw		=> vfdmod.control.run-reverse
+
+net x-amp-fault		joint.0.amp-fault-in	<= hm2_7i96s.0.inm.00.input-01
+net y1-amp-fault	joint.1.amp-fault-in	<= hm2_7i96s.0.inm.00.input-03
+net y2-amp-fault	joint.2.amp-fault-in	<= hm2_7i96s.0.inm.00.input-02
+net z-amp-fault		joint.3.amp-fault-in	<= hm2_7i96s.0.inm.00.input-00
+
+net probe-in => motion.probe-input
+net probe-in <= hm2_7i96s.0.inm.00.input-10-not
+
+net mql hm2_7i96s.0.ssr.00.out-03	<=	halui.mist.is-on

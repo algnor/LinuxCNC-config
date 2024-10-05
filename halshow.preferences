@@ -1,0 +1,51 @@
+# Halshow settings
+# This file is generated automatically.
+wm geometry . 706x811+618+59
+placeFrames 0.36477987421383645
+set ::ratio 0.36477987421383645
+set ::old_w_leftf 160
+set ::watchlist {
+    pin+bitslice.0.in
+    pin+bitslice.0.out-00
+    pin+bitslice.0.out-01
+    pin+bitslice.0.out-02
+    pin+bitslice.0.out-03
+    pin+bitslice.0.out-04
+    pin+bitslice.0.out-05
+    pin+bitslice.0.out-06
+    pin+bitslice.0.out-07
+    pin+bitslice.0.out-08
+    pin+bitslice.0.out-09
+    pin+bitslice.0.out-10
+    pin+bitslice.0.out-11
+    pin+bitslice.0.out-12
+    pin+bitslice.0.out-13
+    pin+bitslice.0.out-14
+    pin+bitslice.0.out-15
+    pin+bitslice.0.time
+    pin+bitslice.1.in
+    pin+bitslice.1.out-00
+    pin+bitslice.1.out-01
+    pin+bitslice.1.out-02
+    pin+bitslice.1.out-03
+    pin+bitslice.1.out-04
+    pin+bitslice.1.out-05
+    pin+bitslice.1.out-06
+    pin+bitslice.1.out-07
+    pin+bitslice.1.out-08
+    pin+bitslice.1.out-09
+    pin+bitslice.1.out-10
+    pin+bitslice.1.out-11
+    pin+bitslice.1.out-12
+    pin+bitslice.1.out-13
+    pin+bitslice.1.out-14
+    pin+bitslice.1.out-15
+    pin+bitslice.1.time
+}
+set ::workmode watchhal
+set ::watchInterval 10
+set ::col1_width 100
+set ::ffmts 
+set ::ifmts 
+set ::alwaysOnTop 0
+set ::autoSaveWatchlist 1
